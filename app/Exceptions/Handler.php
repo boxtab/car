@@ -28,14 +28,31 @@ class Handler extends ExceptionHandler
     ];
 
     /**
-     * Register the exception handling callbacks for the application.
+     * Render an exception into an HTTP response.
      *
-     * @return void
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Throwable  $exception
+     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @throws \Throwable
      */
-    public function register()
+    public function render($request, Throwable $exception)
     {
-        $this->reportable(function (Throwable $e) {
-            //
-        });
+//        return ApiResponse::returnError(
+//            $exception->getMessage(),
+//            Response::HTTP_INTERNAL_SERVER_ERROR
+//        );
+
+        return parent::render($request, $exception);
     }
+
+//    public function register()
+//    {
+//        $this->renderable(function (NotFoundHttpException $e, $request) {
+//            return ApiResponse::returnError(
+//                'Resource not found',
+//                Response::HTTP_NOT_FOUND
+//            );
+//        });
+//    }
 }
