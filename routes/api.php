@@ -33,6 +33,15 @@ Route::group(['prefix' => 'shared/v1'], function () {
     Route::group(['prefix' => 'car'], function () {
         // POST /api/front/v1/car
         Route::post('/', [CarController::class, 'create']);
+
+        // GET /api/admin/v1/car/:id
+        Route::get('{id}', [CarController::class, 'show'])->where('id', '[0-9]+');
+
+        // PUT /api/admin/v1/car/:id
+        Route::put('{id}', [CarController::class, 'update'])->where('id', '[0-9]+');
+
+        // DELETE /api/admin/v1/car/:id
+        Route::delete('{id}', [CarController::class, 'destroy'])->where('id', '[0-9]+');
     });
 });
 
