@@ -5,10 +5,10 @@ namespace App\Http\Resources\API\V1;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * Class CarResource
+ * Class UserResource
  * @package App\Http\Resources\API\V1
  */
-class CarResource extends JsonResource
+class UserResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -20,7 +20,8 @@ class CarResource extends JsonResource
     {
         return [
             'id' => $this->resource->id,
-            'brand' => $this->resource->brand,
+            'name' => $this->resource->name,
+            'email' => $this->resource->email,
         ];
     }
 }

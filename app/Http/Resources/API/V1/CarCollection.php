@@ -2,25 +2,23 @@
 
 namespace App\Http\Resources\API\V1;
 
-use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Support\Facades\Log;
 
 /**
- * Class CarResource
+ * Class CarCollection
  * @package App\Http\Resources\API\V1
  */
-class CarResource extends JsonResource
+class CarCollection extends ResourceCollection
 {
     /**
-     * Transform the resource into an array.
+     * Transform the resource collection into an array.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
     public function toArray($request)
     {
-        return [
-            'id' => $this->resource->id,
-            'brand' => $this->resource->brand,
-        ];
+        return $this->collection;
     }
 }

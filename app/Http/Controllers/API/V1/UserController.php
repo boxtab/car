@@ -2,32 +2,32 @@
 
 namespace App\Http\Controllers\API\V1;
 
+use App\Http\Controllers\API\BaseApiController;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\API\V1\CarStoreRequest;
+use App\Http\Requests\API\V1\UserStoreRequest;
 use App\Http\Resources\API\V1\CarCollection;
-use App\Http\Resources\API\V1\CarResource;
-use App\Repositories\CarRepository;
+use App\Http\Resources\API\V1\UserResource;
+use App\Repositories\UserRepository;
 use App\Support\ApiResponse\ApiResponse;
 use Illuminate\Http\Request;
-use App\Http\Controllers\API\BaseApiController;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Log;
 use Exception;
+use Illuminate\Support\Facades\Log;
+use Ramsey\Collection\Collection;
 
 /**
- * Class CarController
+ * Class UserController
  * @package App\Http\Controllers\API\V1
  */
-class CarController extends BaseApiController
+class UserController extends BaseApiController
 {
     /**
-     * CarController constructor.
-     *
-     * @param CarRepository $carRepository
+     * UserController constructor.
+     * @param UserRepository $userRepository
      */
-    public function __construct(CarRepository $carRepository)
+    public function __construct(UserRepository $userRepository)
     {
-        $this->repository = $carRepository;
+        $this->repository = $userRepository;
     }
 
     /**
@@ -37,24 +37,21 @@ class CarController extends BaseApiController
      */
     public function index()
     {
-        $cars = $this->repository->getList();
-        $carCollection = new CarCollection($cars);
+        $users = $this->repository->getList();
 
-        return ApiResponse::returnData($carCollection);
+        return ApiResponse::returnData(UserResource::collection($users));
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @param CarStoreRequest $request
+     * @param UserStoreRequest $request
      * @return \Illuminate\Http\JsonResponse|Response
      */
-    public function create(CarStoreRequest $request)
+    public function create(UserStoreRequest $request)
     {
         try {
-            $this->repository->createCar([
-                'brand' => $request->input('brand')
-            ]);
+            $this->repository->createUser($request->all());
         } catch (Exception $e) {
             return ApiResponse::returnError($e->getMessage(), $e->getCode() ?? Response::HTTP_INTERNAL_SERVER_ERROR);
         }
@@ -72,44 +69,45 @@ class CarController extends BaseApiController
     {
         try {
             $this->findRecordByID($id);
-            $car = $this->repository->getCar($id);
+            $user = $this->repository->getUser($id);
         } catch (Exception $e) {
             return ApiResponse::returnError($e->getMessage(), $e->getCode() ?? Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        return ApiResponse::returnData(new CarResource($car));
+        return ApiResponse::returnData(new UserResource($user));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param CarStoreRequest $request
+     * @param UserStoreRequest $request
      * @param $id
      * @return \Illuminate\Http\JsonResponse|Response
      */
-    public function update(CarStoreRequest $request, $id)
+    public function update(UserStoreRequest $request, $id)
     {
         try {
             $this->findRecordByID($id);
-            $this->repository->updateCar($request->all(), $id);
+            $this->repository->updateUser($request->all(), $id);
 
         } catch (Exception $e) {
             return ApiResponse::returnError($e->getMessage(), $e->getCode() ?? Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+
         return ApiResponse::returnData([]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse|Response
      */
     public function destroy($id)
     {
         try {
             $this->findRecordByID($id);
-            $this->repository->deleteCar($id);
+            $this->repository->deleteUser($id);
         } catch (Exception $e) {
             if ($e->getCode() == 23000) {
                 return ApiResponse::returnError('The car cannot be deleted there are links to it.');

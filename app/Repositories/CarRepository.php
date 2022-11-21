@@ -69,4 +69,12 @@ class CarRepository extends Repositories
     {
         $this->model->where('id', $carId)->delete();
     }
+
+    /**
+     * @return mixed
+     */
+    public function getList()
+    {
+        return $this->model->select('id', 'brand')->get();
+    }
 }
