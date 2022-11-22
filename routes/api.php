@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\V1\AuthController;
 use App\Http\Controllers\API\V1\BookingController;
 use App\Http\Controllers\API\V1\CarController;
 use App\Http\Controllers\API\V1\UserController;
@@ -27,7 +28,7 @@ use Illuminate\Support\Facades\Route;
  * SHARED
  * =====================================================================================================================
  */
-Route::group(['prefix' => 'shared/v1'], function () {
+Route::group(['prefix' => 'shared/v1', 'middleware' => 'api'], function () {
 
     // POST /api/shared/v1/login
     Route::post('login', [AuthController::class, 'login']);
