@@ -96,6 +96,7 @@ class CarController extends BaseApiController
         } catch (Exception $e) {
             return ApiResponse::returnError($e->getMessage(), $e->getCode() ?? Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+
         return ApiResponse::returnData([]);
     }
 
@@ -117,6 +118,7 @@ class CarController extends BaseApiController
                 return ApiResponse::returnError($e->getMessage(), $e->getCode() ?? Response::HTTP_INTERNAL_SERVER_ERROR);
             }
         }
+
         return ApiResponse::returnData([]);
     }
 }

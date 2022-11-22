@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\V1\BookingController;
 use App\Http\Controllers\API\V1\CarController;
 use App\Http\Controllers\API\V1\UserController;
 use Illuminate\Http\Request;
@@ -27,6 +28,46 @@ use Illuminate\Support\Facades\Route;
  * =====================================================================================================================
  */
 Route::group(['prefix' => 'shared/v1'], function () {
+
+    // POST /api/shared/v1/login
+    Route::post('login', [AuthController::class, 'login']);
+
+    // POST /api/shared/v1/logout
+    Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:api');
+});
+
+
+/**
+ * =====================================================================================================================
+ * FRONT
+ * =====================================================================================================================
+ */
+Route::group(['prefix' => 'front/v1'], function () {
+    /**
+     * Entity: Bookings
+     * Table: bookings
+     */
+    Route::group(['prefix' => 'booking'], function () {
+
+        // GET /api/front/v1/booking
+        Route::get('/', [BookingController::class, 'index']);
+
+        // POST /api/front/v1/booking
+        Route::post('/', [BookingController::class, 'toAppoint']);
+
+        // DELETE /api/front/v1/booking
+        Route::delete('/', [BookingController::class, 'toFree']);
+
+    });
+});
+
+
+/**
+ * =====================================================================================================================
+ * ADMIN
+ * =====================================================================================================================
+ */
+Route::group(['prefix' => 'admin/v1', 'middleware' => ['auth:api', 'user_already_logged_in', 'cors']], function () {
     /**
      * Entity: Cars
      * Table: cars
@@ -70,14 +111,4 @@ Route::group(['prefix' => 'shared/v1'], function () {
         // GET /api/admin/v1/user/list
         Route::get('list', [UserController::class, 'index']);
     });
-});
-
-
-/**
- * =====================================================================================================================
- * ADMIN
- * =====================================================================================================================
- */
-Route::group(['prefix' => 'admin/v1', 'middleware' => ['auth:api', 'user_already_logged_in', 'cors']], function () {
-
 });
