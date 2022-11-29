@@ -31,9 +31,25 @@ class BookingController extends BaseApiController
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @OA\Get(
+     * path="/front/booking",
+     * summary="list",
+     * tags={"booking"},
+     * @OA\Response(
+     *    response=200,
+     *    description="OK",
+     *    @OA\JsonContent(
+     *          @OA\Property(property="succes", type="boolean", example="true"),
+     *          @OA\Property(property="data", type="array",
+     *              example={{"user_id"=2, "car_id"=3},{"user_id"=3, "car_id"=4}},
+     *              @OA\Items(
+     *                  @OA\Property(property="user_id", type="integer"),
+     *                  @OA\Property(property="car_id", type="integer"),
+     *              ),
+     *          ),
+     *       )
+     *    )
+     * )
      */
     public function index()
     {
@@ -43,10 +59,27 @@ class BookingController extends BaseApiController
     }
 
     /**
-     * Assign a car to the user.
-     *
-     * @param BookingRequest $request
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     * @OA\Post(
+     * path="/front/booking",
+     * summary="toAppoint",
+     * tags={"booking"},
+     * @OA\RequestBody(
+     *     required=true,
+     *     @OA\JsonContent(
+     *          required={"user_id", "car_id"},
+     *          @OA\Property(property="user_id", type="integer", example=5),
+     *          @OA\Property(property="car_id", type="integer", example=7),
+     *     ),
+     * ),
+     * @OA\Response(
+     *    response=200,
+     *    description="OK",
+     *    @OA\JsonContent(
+     *          @OA\Property(property="succes", type="boolean", example="true"),
+     *          @OA\Property(property="data", type="array", @OA\Items(), example={}),
+     *      )
+     *   ),
+     * )
      */
     public function toAppoint(BookingRequest $request)
     {
@@ -64,10 +97,27 @@ class BookingController extends BaseApiController
     }
 
     /**
-     * The user free the car.
-     *
-     * @param BookingRequest $request
-     * @return \Illuminate\Http\JsonResponse|Response
+     * @OA\Delete(
+     * path="/front/booking",
+     * summary="toFree",
+     * tags={"booking"},
+     * @OA\RequestBody(
+     *     required=true,
+     *     @OA\JsonContent(
+     *          required={"user_id", "car_id"},
+     *          @OA\Property(property="user_id", type="integer", example=11),
+     *          @OA\Property(property="car_id", type="integer", example=22),
+     *     ),
+     * ),
+     * @OA\Response(
+     *    response=200,
+     *    description="OK",
+     *    @OA\JsonContent(
+     *          @OA\Property(property="succes", type="boolean", example="true"),
+     *          @OA\Property(property="data", type="array", @OA\Items(), example={}),
+     *      )
+     *   ),
+     * )
      */
     public function toFree(BookingRequest $request)
     {

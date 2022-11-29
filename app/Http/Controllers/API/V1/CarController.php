@@ -177,15 +177,14 @@ class CarController extends BaseApiController
     }
 
     /**
-     * @AO\Delete(
-     *     path="/admin/car/{id}",
-     *     tags={"car"},
-     *     summary="delete",
-     *     @AO\Parameter(
+     * @OA\Delete(
+     *      path="/admin/car/{id}",
+     *      tags={"car"},
+     *      summary="delete",
+     *     @OA\Parameter(
      *          name="id",
      *          in="path",
      *          required=true,
-     *          type="string",
      *     ),
      * @OA\Response(
      *    response=200,

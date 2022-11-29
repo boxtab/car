@@ -30,6 +30,28 @@ class UserController extends BaseApiController
         $this->repository = $userRepository;
     }
 
+    /**
+     * @OA\Get(
+     * path="/admin/user/list",
+     * summary="list",
+     * tags={"user"},
+     * @OA\Response(
+     *    response=200,
+     *    description="OK",
+     *    @OA\JsonContent(
+     *          @OA\Property(property="succes", type="boolean", example="true"),
+     *          @OA\Property(property="data", type="array",
+     *              example={{"id"=1, "name"="Ivan", "email"="ivan@gmail.com"},{"id"=2, "name"="vasya", "eamil"="vasya@gmail.com"}},
+     *              @OA\Items(
+     *                  @OA\Property(property="id", type="integer"),
+     *                  @OA\Property(property="name", type="string"),
+     *                  @OA\Property(property="email", type="string"),
+     *              ),
+     *          ),
+     *       )
+     *    )
+     * )
+     */
     public function index()
     {
         $users = $this->repository->getList();
@@ -38,10 +60,29 @@ class UserController extends BaseApiController
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @param UserStoreRequest $request
-     * @return \Illuminate\Http\JsonResponse|Response
+     * @OA\Post(
+     * path="/admin/user",
+     * summary="create",
+     * tags={"user"},
+     * @OA\RequestBody(
+     *     required=true,
+     *     description="Pass user credentials",
+     *     @OA\JsonContent(
+     *          required={"name", "email", "password"},
+     *          @OA\Property(property="name", type="string", example="Jim"),
+     *          @OA\Property(property="email", type="string", example="jim@gmail.com"),
+     *          @OA\Property(property="password", type="string", example="12345qwe"),
+     *     ),
+     * ),
+     * @OA\Response(
+     *    response=200,
+     *    description="OK",
+     *    @OA\JsonContent(
+     *          @OA\Property(property="succes", type="boolean", example="true"),
+     *          @OA\Property(property="data", type="array", @OA\Items(), example={}),
+     *      )
+     *   ),
+     * )
      */
     public function create(UserStoreRequest $request)
     {
@@ -55,10 +96,30 @@ class UserController extends BaseApiController
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param $id
-     * @return \Illuminate\Http\JsonResponse|Response
+     * @OA\Get(
+     *     path="/admin/user/{id}",
+     *     summary="read",
+     *     tags={"user"},
+     *     @OA\Parameter(
+     *          name="id",
+     *          in="path",
+     *          required=true,
+     *     ),
+     *     @OA\Response(
+     *          response=200,
+     *          description="OK",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="succes", type="boolean", example="true"),
+     *              @OA\Property(property="data", type="array", @OA\Items(), example={"id"=1, "name"="smith", "email"="smith@gmail.com"},
+     *                  @OA\Items(
+     *                      @OA\Property(property="id", type="integer"),
+     *                      @OA\Property(property="name", type="string"),
+     *                      @OA\Property(property="email", type="string"),
+     *                  ),
+     *              )
+     *          )
+     *     ),
+     * )
      */
     public function show($id)
     {
@@ -73,11 +134,33 @@ class UserController extends BaseApiController
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param UserStoreRequest $request
-     * @param $id
-     * @return \Illuminate\Http\JsonResponse|Response
+     * @OA\Put(
+     *      path="/admin/user/{id}",
+     *      tags={"user"},
+     *      summary="update",
+     *     @OA\Parameter(
+     *          name="id",
+     *          in="path",
+     *          required=true,
+     *     ),
+     * @OA\RequestBody(
+     *     required=true,
+     *     @OA\JsonContent(
+     *          required={"name", "email", "password"},
+     *          @OA\Property(property="name", type="string", example="sasha"),
+     *          @OA\Property(property="email", type="string", example="sasha@gmail.com"),
+     *          @OA\Property(property="password", type="string", example="zxc123asd"),
+     *     ),
+     * ),
+     * @OA\Response(
+     *    response=200,
+     *    description="OK",
+     *    @OA\JsonContent(
+     *          @OA\Property(property="succes", type="boolean", example="true"),
+     *          @OA\Property(property="data", type="array", @OA\Items(), example={}),
+     *      )
+     *   ),
+     * )
      */
     public function update(UserStoreRequest $request, $id)
     {
@@ -93,10 +176,24 @@ class UserController extends BaseApiController
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param $id
-     * @return \Illuminate\Http\JsonResponse|Response
+     * @OA\Delete(
+     *      path="/admin/user/{id}",
+     *      tags={"user"},
+     *      summary="delete",
+     *     @OA\Parameter(
+     *          name="id",
+     *          in="path",
+     *          required=true,
+     *     ),
+     * @OA\Response(
+     *    response=200,
+     *    description="OK",
+     *    @OA\JsonContent(
+     *          @OA\Property(property="succes", type="boolean", example="true"),
+     *          @OA\Property(property="data", type="array", @OA\Items(), example={}),
+     *      )
+     *   ),
+     * )
      */
     public function destroy($id)
     {
