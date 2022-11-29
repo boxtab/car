@@ -170,60 +170,42 @@
                         }
                     }
                 }
-            }
-        },
-        "/admin/user/list": {
-            "get": {
+            },
+            "put": {
                 "tags": [
-                    "user"
+                    "car"
                 ],
-                "summary": "list",
-                "operationId": "76d630aadfcdcdca81f305945b49b075",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "succes": {
-                                            "type": "boolean",
-                                            "example": "true"
-                                        },
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "properties": {
-                                                    "id": {
-                                                        "type": "integer"
-                                                    },
-                                                    "name": {
-                                                        "type": "string"
-                                                    },
-                                                    "email": {
-                                                        "type": "string"
-                                                    }
-                                                },
-                                                "type": "object"
-                                            },
-                                            "example": [
-                                                {
-                                                    "id": 1,
-                                                    "name": "test-name",
-                                                    "email": "test1@gmail.com"
-                                                },
-                                                {
-                                                    "id": 2,
-                                                    "name": "test2",
-                                                    "email": "test2@gamil.com"
-                                                }
-                                            ]
-                                        }
-                                    },
-                                    "type": "object"
-                                }
+                "summary": "update",
+                "operationId": "4ee36542449e515374590de9baa8dc46",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "brand"
+                                ],
+                                "properties": {
+                                    "brand": {
+                                        "type": "string",
+                                        "example": "Volvo"
+                                    }
+                                },
+                                "type": "object"
                             }
                         }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
                     }
                 }
             }
@@ -233,6 +215,27 @@
         "responses": {
             "404": {
                 "description": "fail"
+            },
+            "200": {
+                "description": "OK",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "properties": {
+                                "succes": {
+                                    "type": "boolean",
+                                    "example": "true"
+                                },
+                                "data": {
+                                    "type": "array",
+                                    "items": {},
+                                    "example": []
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
             }
         }
     },

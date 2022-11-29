@@ -141,29 +141,27 @@ class CarController extends BaseApiController
     }
 
     /**
-     * @SWG\Put(
+     * @OA\Put(
      *      path="/admin/car/{id}",
      *      tags={"car"},
-     *      operationId="ApiV1UpdateUser",
      *      summary="update",
-     *      consumes={"application/x-www-form-urlencoded"},
-     *      produces={"application/json"},
-     *      @SWG\Parameter(
+     *     @OA\Parameter(
      *          name="id",
      *          in="path",
      *          required=true,
-     *          type="string"
-     *      ),
-     *      @SWG\Parameter(
-     *          name="name",
-     *          in="formData",
-     *          required=true,
-     *          type="string"
-     *      ),
-     *      @SWG\Response(
+     *     ),
+     * @OA\RequestBody(
+     *     required=true,
+     *     @OA\JsonContent(
+     *          required={"brand"},
+     *          @OA\Property(property="brand", type="string", example="Volvo"),
+     *     ),
+     * ),
+     *      @OA\Response(
      *          response=200,
      *          description="Success"
      *      ),
+     * )
      */
     public function update(CarStoreRequest $request, $id)
     {
@@ -179,21 +177,25 @@ class CarController extends BaseApiController
     }
 
     /**
-     * @SWG\Delete(
-     *      path="/admin/car",
-     *      tags={"User"},
-     *      operationId="ApiV1DeleteUser",
-     *      summary="Delete User",
-     *      @SWG\Parameter(
-     *          name="user_id",
+     * @AO\Delete(
+     *     path="/admin/car/{id}",
+     *     tags={"car"},
+     *     summary="delete",
+     *     @AO\Parameter(
+     *          name="id",
      *          in="path",
      *          required=true,
-     *          type="string"
-     *      ),
-     *      @SWG\Response(
-     *          response=200,
-     *          description="Success"
-     *      ),
+     *          type="string",
+     *     ),
+     * @OA\Response(
+     *    response=200,
+     *    description="OK",
+     *    @OA\JsonContent(
+     *          @OA\Property(property="succes", type="boolean", example="true"),
+     *          @OA\Property(property="data", type="array", @OA\Items(), example={}),
+     *      )
+     *   ),
+     * )
      */
     public function destroy($id)
     {
