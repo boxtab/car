@@ -6,6 +6,7 @@ use App\Http\Controllers\API\BaseApiController;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\BookingRequest;
 use App\Http\Resources\API\V1\BookingResource;
+use App\Jobs\ResearcherJob;
 use App\Repositories\BookingRepository;
 use App\Repositories\CarRepository;
 use App\Support\ApiResponse\ApiResponse;
@@ -54,6 +55,7 @@ class BookingController extends BaseApiController
     public function index()
     {
         $booking = $this->repository->getList();
+        ResearcherJob::dispatch();
 
         return ApiResponse::returnData(BookingResource::collection($booking));
     }
