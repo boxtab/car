@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseApiController;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Http\JsonResponse;
 use Exception;
 
 /**
@@ -31,9 +32,26 @@ class CarController extends BaseApiController
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @OA\Get(
+     * path="/admin/car/list",
+     * summary="list",
+     * tags={"car"},
+     * @OA\Response(
+     *    response=200,
+     *    description="OK",
+     *    @OA\JsonContent(
+     *          @OA\Property(property="succes", type="boolean", example="true"),
+     *          @OA\Property(property="data", type="array",
+     *              example={{"id"=4, "Brand"="Audi"},{"id"=5, "Brand"="Chevrolet"}},
+     *              @OA\Items(
+     *                  @OA\Property(property="id", type="integer"),
+     *                  @OA\Property(property="brand", type="string"),
+     *              ),
+     *          ),
+     *       )
+     *    )
+     * )
+     * @OA\Response(response="404", description="fail")
      */
     public function index()
     {
@@ -44,10 +62,33 @@ class CarController extends BaseApiController
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @param CarStoreRequest $request
-     * @return \Illuminate\Http\JsonResponse|Response
+     * @OA\Post(
+     * path="/admin/car",
+     * summary="create",
+     * tags={"car"},
+     * @OA\RequestBody(
+     *     required=true,
+     *     description="Pass car credentials",
+     *     @OA\JsonContent(
+     *          required={"brand"},
+     *          @OA\Property(property="brand", type="string", example="Mercedes"),
+     *     ),
+     * ),
+     * @OA\Response(
+     *    response=200,
+     *    description="OK",
+     *    @OA\JsonContent(
+     *          @OA\Property(property="succes", type="boolean", example="true"),
+     *          @OA\Property(property="data", type="array", @OA\Items(), example={}),
+     *      )
+     *   ),
+     * @OA\Response(
+     *     response=500,
+     *     description="My intenal server error",
+     *     @OA\JsonContent(
+     *      )
+     * )
+     * )
      */
     public function create(CarStoreRequest $request)
     {
@@ -63,10 +104,29 @@ class CarController extends BaseApiController
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param $id
-     * @return \Illuminate\Http\JsonResponse|Response
+     * @OA\Get(
+     *     path="/admin/car/{id}",
+     *     summary="read",
+     *     tags={"car"},
+     *     @OA\Parameter(
+     *          name="id",
+     *          in="path",
+     *          required=true,
+     *     ),
+     *     @OA\Response(
+     *          response=200,
+     *          description="OK",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="succes", type="boolean", example="true"),
+     *              @OA\Property(property="data", type="array", @OA\Items(), example={"id"=3, "brand"="Ford"},
+     *                  @OA\Items(
+     *                      @OA\Property(property="id", type="integer"),
+     *                      @OA\Property(property="brand", type="string"),
+     *                  ),
+     *              )
+     *          )
+     *     ),
+     * )
      */
     public function show($id)
     {
@@ -81,11 +141,29 @@ class CarController extends BaseApiController
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param CarStoreRequest $request
-     * @param $id
-     * @return \Illuminate\Http\JsonResponse|Response
+     * @SWG\Put(
+     *      path="/admin/car/{id}",
+     *      tags={"car"},
+     *      operationId="ApiV1UpdateUser",
+     *      summary="update",
+     *      consumes={"application/x-www-form-urlencoded"},
+     *      produces={"application/json"},
+     *      @SWG\Parameter(
+     *          name="id",
+     *          in="path",
+     *          required=true,
+     *          type="string"
+     *      ),
+     *      @SWG\Parameter(
+     *          name="name",
+     *          in="formData",
+     *          required=true,
+     *          type="string"
+     *      ),
+     *      @SWG\Response(
+     *          response=200,
+     *          description="Success"
+     *      ),
      */
     public function update(CarStoreRequest $request, $id)
     {
@@ -101,10 +179,21 @@ class CarController extends BaseApiController
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @SWG\Delete(
+     *      path="/admin/car",
+     *      tags={"User"},
+     *      operationId="ApiV1DeleteUser",
+     *      summary="Delete User",
+     *      @SWG\Parameter(
+     *          name="user_id",
+     *          in="path",
+     *          required=true,
+     *          type="string"
+     *      ),
+     *      @SWG\Response(
+     *          response=200,
+     *          description="Success"
+     *      ),
      */
     public function destroy($id)
     {

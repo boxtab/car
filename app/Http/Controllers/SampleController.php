@@ -13,19 +13,6 @@ class SampleController extends Controller
 {
     public function index()
     {
-        $credentials = [
-            'name' => 'test-name',
-            'email' => 'test-email@gmail.com',
-            'password' => 'test-password',
-        ];
-
-//        User::on()->create([
-//            'name'      => $credentials['firstName'],
-//            'password'  => bcrypt($credentials['password']),
-//            'email'     => $credentials['email'],
-//        ]);
-
-
-        return 123;
+        return url()->current();
     }
 }

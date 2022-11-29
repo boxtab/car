@@ -15,9 +15,29 @@ use Illuminate\Support\Facades\Validator;
 use stdClass;
 
 /**
- * Base controller for returning success and failure responses.
+ * @OA\Info(
+ *      version="1.0.0",
+ *      title="Cars Project Documentation",
+ *      description="Cars OpenApi description",
+ *      @OA\Contact(
+ *          email="boxtab@gmail.com"
+ *      ),
+ *      @OA\License(
+ *          name="Car License",
+ *          url="http://www.apache.org/licenses/LICENSE-2.0.html"
+ *      )
+ * )
  *
- * @package App\Http\Controllers\API
+ * @OA\Server(
+ *      url=L5_SWAGGER_CONST_HOST,
+ *      description="Car API Server"
+ * )
+
+ *
+ * @OA\Tag(
+ *     name="Projects Car",
+ *     description="API Endpoints of cars"
+ * )
  */
 class BaseApiController extends Controller
 {

@@ -31,9 +31,26 @@ class UserController extends BaseApiController
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @OA\Get(
+     * path="/admin/user/list",
+     * summary="list",
+     * tags={"user"},
+     * @OA\Response(
+     *    response=200,
+     *    description="OK",
+     *    @OA\JsonContent(
+     *          @OA\Property(property="succes", type="boolean", example="true"),
+     *          @OA\Property(property="data", type="array",
+     *              example={{"id"=1, "name"="test-name", "email"="test1@gmail.com"},{"id"=2, "name"="test2", "email"="test2@gamil.com"}},
+     *              @OA\Items(
+     *                  @OA\Property(property="id", type="integer"),
+     *                  @OA\Property(property="name", type="string"),
+     *                  @OA\Property(property="email", type="string"),
+     *              ),
+     *          ),
+     *       )
+     *    )
+     * )
      */
     public function index()
     {

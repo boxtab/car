@@ -28,7 +28,7 @@ use Illuminate\Support\Facades\Route;
  * SHARED
  * =====================================================================================================================
  */
-Route::group(['prefix' => 'shared/v1', 'middleware' => 'api'], function () {
+Route::group(['prefix' => 'v1/shared', 'middleware' => 'api'], function () {
 
     // POST /api/shared/v1/login
     Route::post('login', [AuthController::class, 'login']);
@@ -43,7 +43,7 @@ Route::group(['prefix' => 'shared/v1', 'middleware' => 'api'], function () {
  * FRONT
  * =====================================================================================================================
  */
-Route::group(['prefix' => 'front/v1'], function () {
+Route::group(['prefix' => 'v1/front'], function () {
     /**
      * Entity: Bookings
      * Table: bookings
@@ -68,7 +68,7 @@ Route::group(['prefix' => 'front/v1'], function () {
  * ADMIN
  * =====================================================================================================================
  */
-Route::group(['prefix' => 'admin/v1', 'middleware' => ['auth:api', 'user_already_logged_in', 'cors']], function () {
+Route::group(['prefix' => 'v1/admin'], /*, 'middleware' => ['auth:api', 'user_already_logged_in', 'cors']],*/ function () {
     /**
      * Entity: Cars
      * Table: cars
