@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\V1;
 use App\Http\Controllers\API\BaseApiController;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\AuthLoginRequest;
+use App\Http\Requests\API\V1\UserRegistrationRequest;
 use App\Http\Resources\API\V1\AuthLoginResource;
 use App\Support\ApiResponse\ApiResponse;
 use Carbon\Carbon;
@@ -14,6 +15,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use App\Models\User;
 
 /**
  * Class AuthController
@@ -44,25 +46,48 @@ class AuthController extends BaseApiController
      */
     public function login(AuthLoginRequest $request)
     {
-        $credentials = $request->only(['email', 'password']);
-        $expirationTime = ['exp' => Carbon::now()->addDays(self::EXPIRATION_TIME)->timestamp];
+        $credentials = $request->only('email', 'password');
+
+        $token = JWTAuth::attempt($credentials);
 
         try {
-            $token = JWTAuth::attempt($credentials, $expirationTime);
-            if ( ! $token ) {
-                return ApiResponse::returnError(
-                    ['password' => 'Invalid password!'],
-                    Response::HTTP_UNPROCESSABLE_ENTITY
-                );
+            if ( ! $token) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Login credentials are invalid.',
+                ], 400);
             }
         } catch (JWTException $e) {
-            return ApiResponse::returnError($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
-        } catch (\Exception $e) {
-            return ApiResponse::returnError($e->getMessage(), $e->getCode() ?? Response::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->json([
+                'success' => false,
+                'message' => 'Could not create token.',
+            ], 500);
         }
-        $authLoginResource = new AuthLoginResource($token);
 
-        return ApiResponse::returnData($authLoginResource);
+        return response()->json([
+            'success' => true,
+            'token' => $token,
+        ]);
+
+//        $credentials = $request->only(['email', 'password']);
+//        $expirationTime = ['exp' => Carbon::now()->addDays(self::EXPIRATION_TIME)->timestamp];
+//
+//        try {
+//            $token = JWTAuth::attempt($credentials, $expirationTime);
+//            if ( ! $token ) {
+//                return ApiResponse::returnError(
+//                    ['password' => 'Invalid password!'],
+//                    Response::HTTP_UNPROCESSABLE_ENTITY
+//                );
+//            }
+//        } catch (JWTException $e) {
+//            return ApiResponse::returnError($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+//        } catch (\Exception $e) {
+//            return ApiResponse::returnError($e->getMessage(), $e->getCode() ?? Response::HTTP_INTERNAL_SERVER_ERROR);
+//        }
+//        $authLoginResource = new AuthLoginResource($token);
+//
+//        return ApiResponse::returnData($authLoginResource);
     }
 
     /**
@@ -80,5 +105,21 @@ class AuthController extends BaseApiController
         } catch (JWTException $exception) {
             return ApiResponse::returnError('Sorry, the user cannot be logged out', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    /**
+     * @param UserRegistrationRequest $request
+     * @return JsonResponse|Response
+     */
+    public function register(UserRegistrationRequest $request)
+    {
+        //Request is valid, create new user
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password)
+        ]);
+
+        return ApiResponse::returnData('User created successfully');
     }
 }

@@ -35,6 +35,9 @@ Route::group(['prefix' => 'v1/shared', 'middleware' => 'api'], function () {
 
     // POST /api/shared/v1/logout
     Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:api');
+
+    // POST /api/shared/v1/register
+    Route::post('register', [AuthController::class, 'register']);
 });
 
 
@@ -68,7 +71,15 @@ Route::group(['prefix' => 'v1/front'], function () {
  * ADMIN
  * =====================================================================================================================
  */
-Route::group(['prefix' => 'v1/admin'], /*, 'middleware' => ['auth:api', 'user_already_logged_in', 'cors']],*/ function () {
+Route::group(
+    [
+        'prefix' => 'v1/admin',
+        'middleware' => [
+            'auth:api',
+//            'user_already_logged_in',
+//            'cors'
+        ]
+    ],  function () {
     /**
      * Entity: Cars
      * Table: cars
