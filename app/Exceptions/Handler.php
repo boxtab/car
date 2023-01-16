@@ -2,57 +2,53 @@
 
 namespace App\Exceptions;
 
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Validation\ValidationException;
+use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
 {
     /**
-     * A list of the exception types that are not reported.
+     * A list of the exception types that should not be reported.
      *
-     * @var array<int, class-string<Throwable>>
+     * @var array
      */
     protected $dontReport = [
-        //
+        AuthorizationException::class,
+        HttpException::class,
+        ModelNotFoundException::class,
+        ValidationException::class,
     ];
 
     /**
-     * A list of the inputs that are never flashed for validation exceptions.
+     * Report or log an exception.
      *
-     * @var array<int, string>
+     * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
+     *
+     * @param  \Throwable  $exception
+     * @return void
+     *
+     * @throws \Exception
      */
-    protected $dontFlash = [
-        'current_password',
-        'password',
-        'password_confirmation',
-    ];
+    public function report(Throwable $exception)
+    {
+        parent::report($exception);
+    }
 
     /**
      * Render an exception into an HTTP response.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Throwable  $exception
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return \Illuminate\Http\Response|\Illuminate\Http\JsonResponse
      *
      * @throws \Throwable
      */
     public function render($request, Throwable $exception)
     {
-//        return ApiResponse::returnError(
-//            $exception->getMessage(),
-//            Response::HTTP_INTERNAL_SERVER_ERROR
-//        );
-
         return parent::render($request, $exception);
     }
-
-//    public function register()
-//    {
-//        $this->renderable(function (NotFoundHttpException $e, $request) {
-//            return ApiResponse::returnError(
-//                'Resource not found',
-//                Response::HTTP_NOT_FOUND
-//            );
-//        });
-//    }
 }
