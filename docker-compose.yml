@@ -1,0 +1,45 @@
+version: '3'
+
+networks:
+  lumen:
+    driver: bridge
+
+volumes:
+  lumen_db:
+
+services:
+
+  # =============== mariadb ============= #
+  db:
+    image: mariadb:latest
+    container_name: lumen_db
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_DATABASE=default
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=root
+      - MYSQL_ROOT_PASSWORD=root
+    volumes:
+      - lumen_db:/var/lib/mysql
+    networks:
+      - lumen
+
+  # ============= boilerplate =========== #
+  app:
+    build:
+      context: .
+    depends_on:
+      - db
+    container_name: lumen_app
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    working_dir: /var/www/app
+    volumes:
+      - .:/var/www/app
+    networks:
+      - lumen
+    command: "php -S 0.0.0.0:8000 -t public"
+
